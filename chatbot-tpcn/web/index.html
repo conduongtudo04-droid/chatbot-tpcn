@@ -50,7 +50,16 @@
 </div>
 
 <script>
+/* ===== Backend API =====
+   - Dev nội bộ: tự nhận localhost
+   - Online: đổi URL dưới đây thành URL backend Render/Railway của anh
+*/
+const API = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+  ? "http://localhost:8000"
+  : "https://YOUR-BACKEND-URL.example.com"; // ← ĐỔI THÀNH URL BACKEND PUBLIC
+
 const chat = document.getElementById('chat');
+
 function add(role, text){
   const div = document.createElement('div');
   div.className = 'msg ' + (role==='user' ? 'user' : 'bot');
@@ -58,11 +67,14 @@ function add(role, text){
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
+
 async function ask(){
-  const q = document.getElementById('q').value.trim();
+  const qEl = document.getElementById('q');
+  const q = qEl.value.trim();
   if(!q) return;
   add('user', q);
-  document.getElementById('q').value = '';
+  qEl.value = '';
+
   const payload = {
     query: q,
     profile: {
@@ -70,12 +82,15 @@ async function ask(){
       ulcer: document.getElementById('ulcer').checked
     }
   };
+
   try{
-    const res = await fetch('http://localhost:8000/ask', {
-      method:'POST', headers:{'Content-Type':'application/json'},
+    const res = await fetch(`${API}/ask`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
     const data = await res.json();
+
     let text = '';
     if(data.type==='symptom'){
       text += `• Triệu chứng nhận diện: "${data.query}"\n`;
@@ -107,9 +122,10 @@ async function ask(){
     text += `\nℹ️ ${data.disclaimer}`;
     add('bot', text);
   }catch(e){
-    add('bot', 'Lỗi kết nối API. Hãy kiểm tra server FastAPI đang chạy cổng 8000.');
+    add('bot', 'Lỗi kết nối API. Hãy kiểm tra server FastAPI và giá trị const API.');
   }
 }
+
 document.getElementById('send').onclick = ask;
 document.getElementById('q').addEventListener('keydown', e=>{ if(e.key==='Enter') ask(); });
 document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ document.getElementById('q').value=c.textContent; });
