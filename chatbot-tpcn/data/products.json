@@ -1,0 +1,32 @@
+[
+  {
+    "sku": "SKU-GEL-LUNG",
+    "name": "Gel Thảo Dược Giảm Đau Lưng",
+    "description": "Gel thảo dược giúp giảm đau cơ – khớp vùng lưng, thấm nhanh.",
+    "benefits": ["Giảm đau cơ", "Làm ấm vùng cơ", "Hỗ trợ vận động"],
+    "directions": "Bôi lượng vừa đủ, 2–3 lần/ngày. Không bôi vùng da trầy xước.",
+    "warnings": "Tránh tiếp xúc mắt; ngưng dùng nếu kích ứng.",
+    "tags": ["đau lưng", "cơ xương khớp"],
+    "link": "https://example.com/gel-giam-dau-lung"
+  },
+  {
+    "sku": "SKU-VIEN-GIANCO",
+    "name": "Viên Giãn Cơ Thực Phẩm Bảo Vệ Sức Khỏe",
+    "description": "Hỗ trợ thư giãn cơ, giảm co cứng cơ vùng lưng – vai gáy.",
+    "benefits": ["Thư giãn cơ", "Giảm co cứng"],
+    "directions": "1–2 viên/lần, ngày 2 lần sau ăn, 7–10 ngày.",
+    "warnings": "Không dùng cho phụ nữ có thai, cho con bú.",
+    "tags": ["đau lưng","giãn cơ"],
+    "link": "https://example.com/vien-gian-co"
+  },
+  {
+    "sku": "SKU-CA-CA",
+    "name": "Canxi Nano + D3 K2",
+    "description": "Bổ sung canxi nano, hỗ trợ xương khớp.",
+    "benefits": ["Hỗ trợ xương khớp", "Giảm nguy cơ loãng xương"],
+    "directions": "1 viên/lần, ngày 2 lần sau ăn.",
+    "warnings": "Tham khảo chuyên gia nếu đang dùng thuốc đặc trị.",
+    "tags": ["xương khớp"],
+    "link": "https://example.com/canxi-nano"
+  }
+]

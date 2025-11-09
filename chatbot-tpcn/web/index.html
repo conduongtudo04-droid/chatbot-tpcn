@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Smart Advisor TPCN • Demo</title>
+<style>
+  :root{--brand:#0f766e;--soft:#ecfeff}
+  body{font-family:system-ui,-apple-system,Segoe UI,Inter,Roboto,sans-serif;background:#f8fafc;margin:0}
+  .wrap{max-width:780px;margin:24px auto;padding:16px}
+  .card{background:white;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,.06);padding:16px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:#64748b;margin:0 0 16px}
+  .chat{height:520px;overflow:auto;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px}
+  .msg{margin:10px 0;max-width:80%;padding:10px 12px;border-radius:12px;white-space:pre-wrap}
+  .user{background:var(--soft);border:1px solid #cffafe;margin-left:auto}
+  .bot{background:#f1f5f9;border:1px solid #e2e8f0}
+  .row{display:flex;gap:8px;margin-top:12px}
+  input,button{padding:12px;border-radius:12px;border:1px solid #e5e7eb;font-size:15px}
+  button{background:var(--brand);color:white;border:none;cursor:pointer}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .chip{background:#e0f2fe;border:1px solid #bae6fd;color:#0c4a6e;padding:6px 10px;border-radius:999px;cursor:pointer}
+  a{color:#0f766e}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Smart Advisor TPCN 🤖🍃</h1>
+    <p class="sub">Nhập triệu chứng / tên sản phẩm / combo. Demo gọi <code>/ask</code> FastAPI.</p>
+
+    <div class="chips">
+      <span class="chip">Khách bị đau lưng mấy ngày nay</span>
+      <span class="chip">Gợi ý combo cho đau lưng</span>
+      <span class="chip">Hướng dẫn dùng gel giảm đau lưng</span>
+    </div>
+
+    <div id="chat" class="chat"></div>
+
+    <div class="row">
+      <input id="q" placeholder="Ví dụ: Khách nói đau lưng, nên dùng gì?" style="flex:1"/>
+      <button id="send">Gửi</button>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" id="pregnant"> Thai kỳ</label>
+      <label><input type="checkbox" id="ulcer"> Loét dạ dày</label>
+    </div>
+  </div>
+  <p style="color:#64748b;margin-top:12px">*Thông tin tham khảo theo tài liệu nội bộ TPCN; không thay thế tư vấn y tế.</p>
+</div>
+
+<script>
+const chat = document.getElementById('chat');
+function add(role, text){
+  const div = document.createElement('div');
+  div.className = 'msg ' + (role==='user' ? 'user' : 'bot');
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+async function ask(){
+  const q = document.getElementById('q').value.trim();
+  if(!q) return;
+  add('user', q);
+  document.getElementById('q').value = '';
+  const payload = {
+    query: q,
+    profile: {
+      pregnant: document.getElementById('pregnant').checked,
+      ulcer: document.getElementById('ulcer').checked
+    }
+  };
+  try{
+    const res = await fetch('http://localhost:8000/ask', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    let text = '';
+    if(data.type==='symptom'){
+      text += `• Triệu chứng nhận diện: "${data.query}"\n`;
+      if(data.triage_questions?.length){
+        text += `• Cần sàng lọc: ${data.triage_questions.join(' • ')}\n`;
+      }
+      if(data.red_flags?.length){
+        text += `• Dấu hiệu cảnh báo: ${data.red_flags.join(', ')}\n`;
+      }
+    }
+    if(data.products?.length){
+      text += `\n🔹 Sản phẩm gợi ý:\n`;
+      data.products.forEach(p=>{
+        text += `- ${p.name} (${p.sku}): ${p.benefits?.join(', ') || ''}\n  ➜ Cách dùng: ${p.directions}\n  Link: ${p.link}\n`;
+      });
+    }
+    if(data.combos?.length){
+      text += `\n🔸 Combo phù hợp:\n`;
+      data.combos.forEach(c=>{
+        text += `- ${c.name}: gồm ${c.items.map(i=>`${i.sku} x${i.qty}`).join(', ')}\n  ➜ Phác đồ: ${c.protocol}\n`;
+      });
+    }
+    if(data.protocol){
+      text += `\n📋 Phác đồ tham khảo: ${data.protocol}\n`;
+    }
+    if(data.safety_notes?.length){
+      text += `\n⚠️ Lưu ý: ${data.safety_notes.join(' ')}\n`;
+    }
+    text += `\nℹ️ ${data.disclaimer}`;
+    add('bot', text);
+  }catch(e){
+    add('bot', 'Lỗi kết nối API. Hãy kiểm tra server FastAPI đang chạy cổng 8000.');
+  }
+}
+document.getElementById('send').onclick = ask;
+document.getElementById('q').addEventListener('keydown', e=>{ if(e.key==='Enter') ask(); });
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ document.getElementById('q').value=c.textContent; });
+add('bot','Chào bạn! Hãy nhập triệu chứng (vd: "Khách bị đau lưng") để nhận gợi ý sản phẩm, combo & phác đồ.');
+</script>
+</body>
+</html>

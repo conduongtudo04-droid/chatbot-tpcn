@@ -1,0 +1,16 @@
+[
+  {
+    "id": "SYM-LUNG",
+    "symptom": "đau lưng",
+    "keywords": ["đau lưng", "mỏi lưng", "căng cơ lưng"],
+    "triage_questions": [
+      "Đau bao lâu rồi?",
+      "Có sốt, chấn thương, tê yếu chân không?",
+      "Có thai hoặc tiền sử loét dạ dày không?"
+    ],
+    "red_flags": ["sốt cao", "chấn thương nặng", "tê yếu chi", "tiểu không tự chủ"],
+    "first_line_products": ["SKU-GEL-LUNG", "SKU-VIEN-GIANCO"],
+    "combos": ["COMBO-LUNG-A", "COMBO-LUNG-B"],
+    "protocol": "7–14 ngày: ngày 1–3 ưu tiên giảm đau & thư giãn cơ; ngày 4–7 duy trì; theo dõi đáp ứng sau 3–5 ngày."
+  }
+]

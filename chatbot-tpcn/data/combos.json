@@ -1,0 +1,24 @@
+[
+  {
+    "id": "COMBO-LUNG-A",
+    "name": "Combo Đau Lưng Cơ Năng",
+    "targets": ["đau lưng", "cơ năng", "ngồi sai tư thế"],
+    "items": [
+      {"sku": "SKU-GEL-LUNG", "qty": 1},
+      {"sku": "SKU-VIEN-GIANCO", "qty": 1}
+    ],
+    "protocol": "Ngày 1–3: Gel bôi 2–3 lần/ngày + Viên giãn cơ 2 lần/ngày sau ăn; Ngày 4–7: duy trì 1–2 lần/ngày tuỳ đáp ứng.",
+    "notes": "Khuyến khích giãn cơ & điều chỉnh tư thế 10 phút/ngày."
+  },
+  {
+    "id": "COMBO-LUNG-B",
+    "name": "Combo Hỗ Trợ Xương Khớp",
+    "targets": ["đau lưng", "xương khớp"],
+    "items": [
+      {"sku": "SKU-CA-CA", "qty": 1},
+      {"sku": "SKU-GEL-LUNG", "qty": 1}
+    ],
+    "protocol": "Dùng canxi nano 2 lần/ngày sau ăn, gel bôi 2 lần/ngày trong 7–14 ngày.",
+    "notes": "Tăng cường vận động nhẹ & uống đủ nước."
+  }
+]
